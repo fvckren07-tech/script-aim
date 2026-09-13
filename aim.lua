@@ -57,8 +57,8 @@ mt.__namecall = function(self, ...)
             local target = getTarget()
             if target then
                 if method == "Raycast" then
-                    args[2] = (target.Position - args[1].Origin).Unit * 1000
-                else
+                    args[2] = (target.Position - args[1]).Unit * 1000
+                elseif method == "FindPartOnRay" or method == "FindPartOnRayWithIgnoreList" then
                     args[2] = target.Position - args[1].Origin
                 end
                 return oldNamecall(self, unpack(args))
@@ -69,14 +69,3 @@ mt.__namecall = function(self, ...)
 end
 
 setreadonly(mt, true)
-
-local circle = Drawing.new("Circle")
-circle.Thickness = 1
-circle.Radius = Config.FOV
-circle.Color = Color3.fromRGB(255, 0, 0)
-circle.Filled = false
-
-RunService.RenderStepped:Connect(function()
-    circle.Position = Cam.ViewportSize / 2
-    circle.Visible = Config.Enabled
-end)
